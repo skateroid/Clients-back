@@ -43,7 +43,6 @@ public class ClientService {
     public List<Client> getClientByFullName(String fullName) {
         fullName = fullName.replaceAll(" ", "% ");
         List<ClientEntity> clientEntityList = clientRepository.findClientByFullNameContainingIgnoreCaseOrReversedFullNameContainingIgnoreCase(fullName, fullName);
-//        return clientRepository.findClientByFullNameContainingIgnoreCaseOrReversedFullNameContainingIgnoreCase(fullName, fullName);
         return clientMapper.mapEntityListToModel(clientEntityList);
     }
 
