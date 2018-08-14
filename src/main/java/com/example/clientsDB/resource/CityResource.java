@@ -22,31 +22,31 @@ public class CityResource {
 
     @GetMapping
     @ApiOperation("Получить список всех городов")
-    public List<CityChangeRequest> getAll() {
+    public List<City> getAll() {
         return cityService.getAll();
     }
 
     @GetMapping("/search")
     @ApiOperation("Получить город по названию")
-    public CityChangeRequest findCityByName(@RequestParam(name = "name") String name) {
+    public City findCityByName(@RequestParam(name = "name") String name) {
         return cityService.findCityByName(name);
     }
 
     @GetMapping("{id}")
     @ApiOperation("Получить город по id")
-    public CityChangeRequest findCityById(@PathVariable(name = "id") Long id) {
+    public City findCityById(@PathVariable(name = "id") Long id) {
         return cityService.findCityById(id);
     }
 
     @PostMapping
     @ApiOperation("Добавить город")
-    public CityChangeRequest create(@Valid @RequestBody CityChangeRequest request) {
+    public City create(@Valid @RequestBody CityChangeRequest request) {
         return cityService.createCity(request);
     }
 
     @PutMapping("{cityId}")
     @ApiOperation("Внести изменения в существующий город")
-    public CityChangeRequest update(@PathVariable("cityId") Long cityId,
+    public City update(@PathVariable("cityId") Long cityId,
                        @RequestBody CityChangeRequest request) {
         return cityService.updateCity(cityId, request);
     }

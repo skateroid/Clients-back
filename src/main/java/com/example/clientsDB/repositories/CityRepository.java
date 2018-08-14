@@ -1,13 +1,13 @@
 package com.example.clientsDB.repositories;
 
-import com.example.clientsDB.model.City;
+import com.example.clientsDB.entity.CityEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface CityRepository extends JpaRepository<City, Long> {
+public interface CityRepository extends JpaRepository<CityEntity, Long> {
 
-    Optional<City> findCityByNameContainingIgnoreCase(String name);
+    Optional<CityEntity> findCityByNameContainingIgnoreCase(String name);
 
-    Optional<City> findCityById(Long id);
+    Optional<CityEntity> findCityById(Long id);
 }

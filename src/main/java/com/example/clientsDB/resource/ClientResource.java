@@ -22,31 +22,31 @@ public class ClientResource {
 
     @GetMapping
     @ApiOperation("Получить список всех клиентов")
-    public List<ClientChangeRequest> getAll() {
+    public List<Client> getAll() {
         return clientService.getAll();
     }
 
     @GetMapping("{id}")
     @ApiOperation("Получить клиента по id")
-    public ClientChangeRequest getClientById(@PathVariable(name = "id") Long id) {
+    public Client getClientById(@PathVariable(name = "id") Long id) {
         return clientService.getClientById(id);
     }
 
     @GetMapping("/search")
     @ApiOperation("Получить клиента по имени и фамилии")
-    public List<ClientChangeRequest> getClientByFullName(@RequestParam(name = "fullName") String fullName) {
+    public List<Client> getClientByFullName(@RequestParam(name = "fullName") String fullName) {
         return clientService.getClientByFullName(fullName);
     }
 
     @PostMapping
     @ApiOperation("Создать клиента")
-    public ClientChangeRequest create(@Valid @RequestBody ClientChangeRequest clientChangeRequest) {
+    public Client create(@Valid @RequestBody ClientChangeRequest clientChangeRequest) {
         return clientService.createClient(clientChangeRequest);
     }
 
     @PutMapping("{clientId}")
     @ApiOperation("Изменить существующего клиента")
-    public ClientChangeRequest update(@PathVariable("clientId") Long id,
+    public Client update(@PathVariable("clientId") Long id,
                        @RequestBody ClientChangeRequest request) {
         return clientService.updateClient(id, request);
     }

@@ -1,19 +1,10 @@
 package com.example.clientsDB.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import javax.persistence.*;
-
-@Getter
-@Setter
-@Entity
+@Data
 public class Mark {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "MarkIdGenerator")
-    @SequenceGenerator(name = "MarkIdGenerator", sequenceName = "mark_id_seq")
     private Long id;
     private String name;
-
 }

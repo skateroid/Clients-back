@@ -1,6 +1,7 @@
 package com.example.clientsDB.service;
 
 import com.example.clientsDB.dto.MarkChangeRequest;
+import com.example.clientsDB.entity.MarkEntity;
 import com.example.clientsDB.exception.EntityNotFoundException;
 import com.example.clientsDB.mapper.MarkMapper;
 import com.example.clientsDB.model.Mark;
@@ -22,44 +23,44 @@ public class MarkService {
         this.markMapper = markMapper;
     }
 
-    public List<MarkChangeRequest> getAll() {
+    public List<Mark> getAll() {
 //        return markRepository.findAll();
         return markMapper.mapEntitiesToModel(markRepository.findAll());
     }
 
-    public MarkChangeRequest getMarkByName(String name) {
-        Mark mark = markRepository.findMarkByNameContainingIgnoreCase(name)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Mark: %s not found", name)));
-        return markMapper.mapEntity(mark);
+    public Mark getMarkByName(String name) {
+        MarkEntity markEntity = markRepository.findMarkByNameContainingIgnoreCase(name)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity: %s not found", name)));
+        return markMapper.mapEntityToModel(markEntity);
 //        return markRepository.findMarkByNameContainingIgnoreCase(name)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("Mark: %s not found", name)));
+//                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity: %s not found", name)));
     }
 
-    public MarkChangeRequest getMarkById(Long id) {
-        Mark mark = markRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Mark with id: %d not found", id)));
-        return markMapper.mapEntity(mark);
+    public Mark getMarkById(Long id) {
+        MarkEntity markEntity = markRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
+        return markMapper.mapEntityToModel(markEntity);
 //        return markRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("Mark with id: %d not found", id)));
+//                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
     }
 
-    public MarkChangeRequest createMark(MarkChangeRequest markChangeRequest) {
-//        Mark newMark = new Mark();
-//        newMark.setName(markChangeRequest.getName());
-        Mark newMark = markMapper.dtoToEntity(markChangeRequest);
-        markRepository.save(newMark);
+    public Mark createMark(MarkChangeRequest markChangeRequest) {
+//        MarkEntity newMarkEntity = new MarkEntity();
+//        newMarkEntity.setName(markChangeRequest.getName());
+        MarkEntity newMarkEntity = markMapper.dtoToEntity(markChangeRequest);
+        markRepository.save(newMarkEntity);
 
-        return markService.getMarkById(newMark.getId());
+        return markService.getMarkById(newMarkEntity.getId());
     }
 
-    public MarkChangeRequest updateMark(Long id, MarkChangeRequest request) {
-//        Mark currentMark = getMarkById(id);
+    public Mark updateMark(Long id, MarkChangeRequest request) {
+//        MarkEntity currentMark = getMarkById(id);
 //        currentMark.setName(request.getName());
-        Mark markOld = markRepository.findMarkById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Mark with id: %d not found", id)));
-        Mark markNew = markMapper.dtoToEntity(request);
-        markNew.setId(markOld.getId());
-        markRepository.save(markNew);
+        MarkEntity markEntityOld = markRepository.findMarkById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
+        MarkEntity markEntityNew = markMapper.dtoToEntity(request);
+        markEntityNew.setId(markEntityOld.getId());
+        markRepository.save(markEntityNew);
 
         return markService.getMarkById(id);
     }

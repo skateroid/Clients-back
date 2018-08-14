@@ -1,6 +1,7 @@
 package com.example.clientsDB.mapper;
 
 import com.example.clientsDB.dto.ClientChangeRequest;
+import com.example.clientsDB.entity.ClientEntity;
 import com.example.clientsDB.model.Client;
 import org.mapstruct.Mapper;
 
@@ -9,9 +10,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ClientMapper {
 
-    Client mapToEntity(ClientChangeRequest request);
+    ClientEntity mapToEntity(ClientChangeRequest request);
 
-    List<ClientChangeRequest> mapEntityListToModel(List<Client> client);
+    List<Client> mapEntityListToModel(List<ClientEntity> clientEntity);
 
-    ClientChangeRequest mapEntityToModel(Client client);
+    Client mapEntityToModel(ClientEntity clientEntity);
 }

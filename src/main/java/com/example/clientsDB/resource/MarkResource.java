@@ -22,31 +22,31 @@ public class MarkResource {
 
     @GetMapping
     @ApiOperation("Получить все марки")
-    public List<MarkChangeRequest> getAll() {
+    public List<Mark> getAll() {
         return markService.getAll();
     }
 
     @GetMapping("{id}")
     @ApiOperation("Получить марку по id")
-    public MarkChangeRequest getMarkById(@PathVariable(name = "id") Long id) {
+    public Mark getMarkById(@PathVariable(name = "id") Long id) {
         return markService.getMarkById(id);
     }
 
     @GetMapping("/search")
     @ApiOperation("Получить марку по названию")
-    public MarkChangeRequest getMarkByName(@RequestParam (name = "name")String name) {
+    public Mark getMarkByName(@RequestParam (name = "name")String name) {
         return markService.getMarkByName(name);
     }
 
     @PostMapping
     @ApiOperation("Добавить марку")
-    public MarkChangeRequest create(@Valid @RequestBody MarkChangeRequest request) {
+    public Mark create(@Valid @RequestBody MarkChangeRequest request) {
         return markService.createMark(request);
     }
 
     @PutMapping("{markId}")
     @ApiOperation("Внести изменения в существующую марку")
-    public MarkChangeRequest update(@PathVariable ("markId") Long id,
+    public Mark update(@PathVariable ("markId") Long id,
                        @RequestBody MarkChangeRequest request) {
        return markService.updateMark(id, request);
     }

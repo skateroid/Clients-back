@@ -1,6 +1,7 @@
 package com.example.clientsDB.service;
 
 import com.example.clientsDB.dto.CityChangeRequest;
+import com.example.clientsDB.entity.CityEntity;
 import com.example.clientsDB.exception.EntityNotFoundException;
 import com.example.clientsDB.mapper.CityMapper;
 import com.example.clientsDB.model.City;
@@ -23,44 +24,44 @@ public class CityService {
         this.cityMapper = cityMapper;
     }
 
-    public CityChangeRequest findCityById(Long id) {
-        City city = cityRepository.findCityById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("City with id: %d not found", id)));
-        return  cityMapper.mapEntityToModel(city);
+    public City findCityById(Long id) {
+        CityEntity cityEntity = cityRepository.findCityById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
+        return  cityMapper.mapEntityToModel(cityEntity);
 //        return cityRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("City with id: %d not found", id)));
+//                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
     }
 
-    public CityChangeRequest findCityByName(String name) {
-        City city = cityRepository.findCityByNameContainingIgnoreCase(name)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("City: %s not found", name)));
-        return cityMapper.mapEntityToModel(city);
+    public City findCityByName(String name) {
+        CityEntity cityEntity = cityRepository.findCityByNameContainingIgnoreCase(name)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity: %s not found", name)));
+        return cityMapper.mapEntityToModel(cityEntity);
 //        return cityRepository.findCityByNameContainingIgnoreCase(name)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("City: %s not found", name)));
+//                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity: %s not found", name)));
     }
 
-    public List<CityChangeRequest> getAll() {
+    public List<City> getAll() {
         return cityMapper.mapEntitiesToModel(cityRepository.findAll());
 //        return cityRepository.findAll();
     }
 
-    public CityChangeRequest createCity(CityChangeRequest cityChangeRequest) {
-//        City newCity = new City();
+    public City createCity(CityChangeRequest cityChangeRequest) {
+//        CityEntity newCity = new CityEntity();
 //        newCity.setName(cityChangeRequest.getName());
-        City city = cityMapper.mapToEntity(cityChangeRequest);
-        cityRepository.save(city);
+        CityEntity cityEntity = cityMapper.mapToEntity(cityChangeRequest);
+        cityRepository.save(cityEntity);
 
-        return cityService.findCityById(city.getId());
+        return cityService.findCityById(cityEntity.getId());
     }
 
-    public CityChangeRequest updateCity(Long id, CityChangeRequest request) {
-//        City currentCity = findCityById(id);
+    public City updateCity(Long id, CityChangeRequest request) {
+//        CityEntity currentCity = findCityById(id);
 //        currentCity.setName(request.getName());
-        City cityOld = cityRepository.findCityById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("City with id: %d not found", id)));
-        City cityNew = cityMapper.mapToEntity(request);
-        cityNew.setId(cityOld.getId());
-        cityRepository.save(cityNew);
+        CityEntity cityEntityOld = cityRepository.findCityById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
+        CityEntity cityEntityNew = cityMapper.mapToEntity(request);
+        cityEntityNew.setId(cityEntityOld.getId());
+        cityRepository.save(cityEntityNew);
 
         return cityService.findCityById(id);
     }
