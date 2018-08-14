@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-06-1203-01
+      author: khokhlin
+      changes:
+        - createTable:
+            tableName: client
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: lastname
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: patronymic
+                  type: varchar(30)
+              - column:
+                  name: city_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_client_city_id
+            baseTableName: client
+            baseColumnNames: city_id
+            referencedTableName: city
+            referencedColumnNames: id

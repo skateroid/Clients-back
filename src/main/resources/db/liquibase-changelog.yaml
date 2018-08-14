@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - include:
+      file: db/changelogs/2018-08-06-init-mark-table.yaml
+  - include:
+      file: db/changelogs/2018-08-06-init-city-table.yaml
+  - include:
+      file: db/changelogs/2018-08-06-init-car-table.yaml
+  - include:
+      file: db/changelogs/2018-08-06-init-client-table.yaml
+  - include:
+      file: db/changelogs/2018-08-06-init-client_car-table.yaml
+  - include:
+      file: db/changelogs/2018-08-08-drop-client_car-table.yaml
+  - include:
+      file: db/changelogs/2018-08-08-change-car-table.yaml
+  - include:
+      file: db/changelogs/2018-08-08-init-client_city-table.yaml
+  - include:
+      file: db/changelogs/2018-08-08-change-client-table.yaml
+  - include:
+      file: db/changelogs/2018-08-09-create-sequences.yaml

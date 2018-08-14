@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-08-1205-01
+      author: khokhlin
+      changes:
+        - dropTable:
+            tableName: client_car

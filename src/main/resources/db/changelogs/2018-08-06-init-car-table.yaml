@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-06-1202-01
+      author: khokhlin
+      changes:
+        - createTable:
+            tableName: car
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    - primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: registration_plate
+                  type: varchar(9)
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: mark_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+        - addForeignKeyConstraint:
+            constraintName: fk_car_mark_id
+            baseTableName: car
+            baseColumnNames: mark_id
+            referencedTableName: mark
+            referencedColumnNames: id

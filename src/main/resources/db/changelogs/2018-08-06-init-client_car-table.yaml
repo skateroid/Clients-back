@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-06-1204-01
+      author: khokhlin
+      changes:
+        - createTable:
+            tableName: client_car
+            columns:
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+              - column:
+                  name: car_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+                    - unique: true
+        - addForeignKeyConstraint:
+            constraintName: fk_client_car_client_id
+            baseTableName: client_car
+            baseColumnNames: client_id
+            referencedTableName: client
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            constraintName: fk_client_car_car_id
+            baseTableName: client_car
+            baseColumnNames: car_id
+            referencedTableName: car
+            referencedColumnNames: id
+        - addPrimaryKey:
+            tableName: client_car
+            columnNames: client_id, car_id
+            constraintName: pk_client_car

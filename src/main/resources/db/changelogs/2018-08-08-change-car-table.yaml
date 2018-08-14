@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-08-1206-01
+      author: khokhlin
+      changes:
+        - addColumn:
+            tableName: car
+            columns:
+              - column:
+                  name: client_id
+                  type: bigint
+                  constraints:
+                    - nullable: false
+
+  - changeSet:
+      id: 2018-08-08-1206-02
+      author: khokhlin
+      changes:
+        - addForeignKeyConstraint:
+            constraintName: fk_car_client_id
+            baseTableName: car
+            baseColumnNames: client_id
+            referencedTableName: client
+            referencedColumnNames: id

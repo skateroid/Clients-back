@@ -1,0 +1,46 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2018-08-06-1200-01
+      author: khokhlin
+      changes:
+        - createTable:
+            tableName: mark
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(30)
+                  constraints:
+                  - nullable: false
+
+  - changeSet:
+      id: 2018-08-06-1200-02-h2
+      author: khokhlin
+      dbms: h2
+      changes:
+        - sql:
+            sql: ALTER TABLE mark ADD upper_name VARCHAR AS UPPER(name)
+        - createIndex:
+            indexName: ui_mark_upper_name
+            tableName: mark
+            unique: true
+            columns:
+              - column:
+                  name: upper_name
+
+  - changeSet:
+      id: 2018-08-06-1200-02-postgresql
+      author: khokhlin
+      dbms: postgresql
+      changes:
+        - createIndex:
+            indexName: ui_mark_upper_name
+            tableName: mark
+            unique: true
+            columns:
+              - column:
+                  name: UPPER(name)
