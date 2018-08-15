@@ -8,8 +8,6 @@ import java.util.Optional;
 
 public interface CityRepository extends JpaRepository<CityEntity, Long> {
 
-//    Optional<CityEntity> findCityByNameContainingIgnoreCase(String name);
-
     Optional<CityEntity> findCityById(Long id);
 
     List<CityEntity> findCitiesByNameContainingIgnoreCase(String name);

@@ -12,7 +12,10 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -35,15 +38,12 @@ public class ClientService {
             return new ArrayList<>();
         }
         return clientMapper.mapEntityListToModel(clientRepository.findAll());
-//        return clientRepository.findAll();
     }
 
     public Client getClientById(Long id) {
         ClientEntity clientEntity = clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
         return clientMapper.mapEntityToModel(clientEntity);
-//        return clientRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("ClientEntity not found"));
     }
 
     public List<Client> getClientByFullName(String fullName) {
@@ -60,75 +60,31 @@ public class ClientService {
         clientRepository.save(clientEntity);
 
         return clientService.getClientById(clientEntity.getId());
-//        ClientEntity newClient = new ClientEntity();
-//        newClient.setName(request.getName());
-//        newClient.setLastname(request.getLastname());
-//        newClient.setPatronymic(request.getPatronymic());
-//        // set carEntities set to clientEntity
-//        newClient.setCarEntities(internalChangeClientCar(request, newClient));
-//
-//        // collect all cities to set
-//        Set<CityEntity> citySet = new HashSet<>();
-//        for (LinkToCity city : request.getCity()) {
-//            CityEntity newCity = new CityEntity();
-//            newCity.setId(city.getId());
-//            // set clientEntity to city
-//            citySet.add(newCity);
-//        }
-//        // set cities set to clientEntity
-//        newClient.setCities(citySet);
-//
-//        clientRepository.save(newClient);
     }
 
     public Client updateClient(Long id, ClientChangeRequest request) {
         ClientEntity clientEntityOld = clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
         ClientEntity clientEntityNew = clientMapper.mapToEntity(request);
-        for (CarEntity carEntity : clientEntityNew.getCars()) {
-            carEntity.setClient(clientEntityNew);
+
+        HashSet<Long> clientEntityOldSetId = (HashSet<Long>) clientEntityOld.getCars().stream()
+                .map(CarEntity::getId).collect(Collectors.toSet());
+        HashSet<Long> clientEntityNewSetId = (HashSet<Long>) clientEntityNew.getCars().stream()
+                .map(CarEntity::getId).collect(Collectors.toSet());
+        HashSet<Long> diff = (HashSet<Long>) clientEntityNewSetId.stream().filter(o -> !clientEntityOldSetId.contains(o)).collect(Collectors.toSet());
+        if (!diff.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            diff.forEach(n -> builder.append(n).append(", "));
+            throw new EntityNotFoundException(String.format("Car with id: %s not found", builder.toString().substring(0, builder.length() - 2)));
+        }
+        for (CarEntity carEntityNew : clientEntityNew.getCars()) {
+            carEntityNew.setClient(clientEntityNew);
         }
         clientEntityNew.setId(clientEntityOld.getId());
         clientRepository.save(clientEntityNew);
 
         return clientService.getClientById(id);
-//        ClientEntity currentClient = getClientById(id);
-//        currentClient.getCarEntities().clear();
-//
-//        currentClient.setName(request.getName());
-//        currentClient.setLastname(request.getLastname());
-//        currentClient.setPatronymic(request.getPatronymic());
-//
-//        Set<CityEntity> citySet = new HashSet<>();
-//        for (LinkToCity city : request.getCity()) {
-//            CityEntity newCity = new CityEntity();
-//            newCity.setId(city.getId());
-//            citySet.add(newCity);
-//        }
-//        currentClient.setCities(citySet);
-//
-//        currentClient.getCarEntities().addAll(internalChangeClientCar(request, currentClient));
-//        clientRepository.save(currentClient);
     }
-
-//    private Set<CarEntity> internalChangeClientCar(ClientChangeRequest request, ClientEntity newClient) {
-//        Set<CarEntity> carSet = new HashSet<>();
-//        for (CarChangeRequest car : request.getCar()) {
-//            CarEntity newCar = new CarEntity();
-//            newCar.setId(car.getId());
-//            newCar.setClientEntity(newClient);
-//            newCar.setName(car.getName());
-//            newCar.setRegistrationPlate(car.getRegistrationPlate());
-//
-//            MarkEntity markEntity = new MarkEntity();
-//            markEntity.setId(car.getMarkEntity().getId());
-//            newCar.setMarkEntity(markEntity);
-//
-//            carSet.add(newCar);
-//
-//        }
-//        return carSet;
-//    }
 
     public void deleteClient(Long id) {
         try {

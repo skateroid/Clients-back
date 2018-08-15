@@ -30,19 +30,12 @@ public class CityService {
         CityEntity cityEntity = cityRepository.findCityById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
         return  cityMapper.mapEntityToModel(cityEntity);
-//        return cityRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
     }
 
     public List<City> findCityByName(String name) {
         name = name.replaceAll(" ", "%");
         List<CityEntity> cityEntityList = cityRepository.findCitiesByNameContainingIgnoreCase(name);
         return cityMapper.mapEntitiesToModel(cityEntityList);
-//        CityEntity cityEntity = cityRepository.findCityByNameContainingIgnoreCase(name)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity: %s not found", name)));
-//        return cityMapper.mapEntityToModel(cityEntity);
-//        return cityRepository.findCityByNameContainingIgnoreCase(name)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity: %s not found", name)));
     }
 
     public List<City> getAll() {
@@ -50,12 +43,9 @@ public class CityService {
             return new ArrayList<>();
         }
         return cityMapper.mapEntitiesToModel(cityRepository.findAll());
-//        return cityRepository.findAll();
     }
 
     public City createCity(CityChangeRequest cityChangeRequest) {
-//        CityEntity newCity = new CityEntity();
-//        newCity.setName(cityChangeRequest.getName());
         CityEntity cityEntity = cityMapper.mapToEntity(cityChangeRequest);
         cityRepository.save(cityEntity);
 
@@ -63,8 +53,6 @@ public class CityService {
     }
 
     public City updateCity(Long id, CityChangeRequest request) {
-//        CityEntity currentCity = findCityById(id);
-//        currentCity.setName(request.getName());
         CityEntity cityEntityOld = cityRepository.findCityById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("CityEntity with id: %d not found", id)));
         CityEntity cityEntityNew = cityMapper.mapToEntity(request);

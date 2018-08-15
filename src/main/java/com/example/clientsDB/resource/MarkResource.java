@@ -34,7 +34,7 @@ public class MarkResource {
 
     @GetMapping("/search")
     @ApiOperation("Получить марку по названию")
-    public Mark getMarkByName(@RequestParam (name = "name")String name) {
+    public List<Mark> getMarkByName(@RequestParam (name = "name")String name) {
         return markService.getMarkByName(name);
     }
 

@@ -30,28 +30,23 @@ public class MarkService {
             return new ArrayList<>();
         }
         return markMapper.mapEntitiesToModel(markRepository.findAll());
-//        return markRepository.findAll();
     }
 
-    public Mark getMarkByName(String name) {
-        MarkEntity markEntity = markRepository.findMarkByNameContainingIgnoreCase(name)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity: %s not found", name)));
-        return markMapper.mapEntityToModel(markEntity);
-//        return markRepository.findMarkByNameContainingIgnoreCase(name)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity: %s not found", name)));
+    public List<Mark> getMarkByName(String name) {
+        if (markRepository.findMarkByNameContainingIgnoreCase(name).isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<MarkEntity> markEntityList = markRepository.findMarkByNameContainingIgnoreCase(name);
+        return markMapper.mapEntitiesToModel(markEntityList);
     }
 
     public Mark getMarkById(Long id) {
         MarkEntity markEntity = markRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
         return markMapper.mapEntityToModel(markEntity);
-//        return markRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
     }
 
     public Mark createMark(MarkChangeRequest markChangeRequest) {
-//        MarkEntity newMarkEntity = new MarkEntity();
-//        newMarkEntity.setName(markChangeRequest.getName());
         MarkEntity newMarkEntity = markMapper.dtoToEntity(markChangeRequest);
         markRepository.save(newMarkEntity);
 
@@ -59,8 +54,6 @@ public class MarkService {
     }
 
     public Mark updateMark(Long id, MarkChangeRequest request) {
-//        MarkEntity currentMark = getMarkById(id);
-//        currentMark.setName(request.getName());
         MarkEntity markEntityOld = markRepository.findMarkById(id)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id)));
         MarkEntity markEntityNew = markMapper.dtoToEntity(request);
