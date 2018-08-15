@@ -7,8 +7,10 @@ import com.example.clientsDB.mapper.MarkMapper;
 import com.example.clientsDB.model.Mark;
 import com.example.clientsDB.repositories.MarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,8 +26,11 @@ public class MarkService {
     }
 
     public List<Mark> getAll() {
-//        return markRepository.findAll();
+        if (markRepository.findAll().isEmpty()) {
+            return new ArrayList<>();
+        }
         return markMapper.mapEntitiesToModel(markRepository.findAll());
+//        return markRepository.findAll();
     }
 
     public Mark getMarkByName(String name) {
@@ -66,6 +71,10 @@ public class MarkService {
     }
 
     public void deleteMark(Long id) {
-        markRepository.deleteById(id);
+        try {
+            markRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+             throw new EntityNotFoundException(String.format("MarkEntity with id: %d not found", id));
+        }
     }
 }

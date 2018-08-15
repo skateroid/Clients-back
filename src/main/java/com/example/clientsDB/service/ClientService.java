@@ -8,7 +8,10 @@ import com.example.clientsDB.mapper.ClientMapper;
 import com.example.clientsDB.model.Client;
 import com.example.clientsDB.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,13 +31,16 @@ public class ClientService {
     }
 
     public List<Client> getAll() {
+        if (clientRepository.findAll().isEmpty()) {
+            return new ArrayList<>();
+        }
         return clientMapper.mapEntityListToModel(clientRepository.findAll());
 //        return clientRepository.findAll();
     }
 
     public Client getClientById(Long id) {
         ClientEntity clientEntity = clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ClientEntity not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
         return clientMapper.mapEntityToModel(clientEntity);
 //        return clientRepository.findById(id)
 //                .orElseThrow(() -> new EntityNotFoundException("ClientEntity not found"));
@@ -48,6 +54,9 @@ public class ClientService {
 
     public Client createClient(ClientChangeRequest request) {
         ClientEntity clientEntity = clientMapper.mapToEntity(request);
+        for (CarEntity car : clientEntity.getCars()) {
+            car.setClient(clientEntity);
+        }
         clientRepository.save(clientEntity);
 
         return clientService.getClientById(clientEntity.getId());
@@ -74,7 +83,7 @@ public class ClientService {
 
     public Client updateClient(Long id, ClientChangeRequest request) {
         ClientEntity clientEntityOld = clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("ClientEntity not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
         ClientEntity clientEntityNew = clientMapper.mapToEntity(request);
         for (CarEntity carEntity : clientEntityNew.getCars()) {
             carEntity.setClient(clientEntityNew);
@@ -122,6 +131,10 @@ public class ClientService {
 //    }
 
     public void deleteClient(Long id) {
-        clientRepository.deleteById(id);
+        try {
+            clientRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException("Client not found");
+        }
     }
 }

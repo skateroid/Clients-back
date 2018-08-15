@@ -28,7 +28,7 @@ public class CityResource {
 
     @GetMapping("/search")
     @ApiOperation("Получить город по названию")
-    public City findCityByName(@RequestParam(name = "name") String name) {
+    public List<City> findCityByName(@RequestParam(name = "name") String name) {
         return cityService.findCityByName(name);
     }
 
