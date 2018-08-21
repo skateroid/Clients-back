@@ -16,4 +16,4 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/client_db_v2
     username: postgres
-    password: Crfnthjbl2
+    password: postgres

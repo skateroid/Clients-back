@@ -1,5 +1,6 @@
 package com.example.clientsDB.model;
 
+import java.util.List;
 import lombok.Data;
 
 import java.util.Set;
@@ -11,6 +12,6 @@ public class Client {
     private String name;
     private String lastname;
     private String patronymic;
-    private Set<City> cities;
-    private Set<Car> cars;
+    private List<City> cities;
+    private List<Car> cars;
 }

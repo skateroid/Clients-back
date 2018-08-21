@@ -25,19 +25,13 @@ public class ClientService {
     @Autowired
     private ClientService clientService;
 
-//    @Value("${application.clientId}")
-//    private String property;
-
     public ClientService(ClientRepository clientRepository, ClientMapper clientMapper) {
         this.clientRepository = clientRepository;
         this.clientMapper = clientMapper;
     }
 
     public List<Client> getAll() {
-        if (clientRepository.findAll().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return clientMapper.mapEntityListToModel(clientRepository.findAll());
+        return clientMapper.mapEntityListToModel(clientRepository.findAllByOrderByFullNameAsc());
     }
 
     public Client getClientById(Long id) {
@@ -70,13 +64,15 @@ public class ClientService {
         HashSet<Long> clientEntityOldSetId = (HashSet<Long>) clientEntityOld.getCars().stream()
                 .map(CarEntity::getId).collect(Collectors.toSet());
         HashSet<Long> clientEntityNewSetId = (HashSet<Long>) clientEntityNew.getCars().stream()
+                .filter(o -> o.getId() != null)
                 .map(CarEntity::getId).collect(Collectors.toSet());
-        HashSet<Long> diff = (HashSet<Long>) clientEntityNewSetId.stream().filter(o -> !clientEntityOldSetId.contains(o)).collect(Collectors.toSet());
-        if (!diff.isEmpty()) {
-            StringBuilder builder = new StringBuilder();
-            diff.forEach(n -> builder.append(n).append(", "));
-            throw new EntityNotFoundException(String.format("Car with id: %s not found", builder.toString().substring(0, builder.length() - 2)));
+            HashSet<Long> diff = (HashSet<Long>) clientEntityNewSetId.stream().filter(o -> !clientEntityOldSetId.contains(o)).collect(Collectors.toSet());
+            if (!diff.isEmpty()) {
+                StringBuilder builder = new StringBuilder();
+                diff.forEach(n -> builder.append(n).append(", "));
+                throw new EntityNotFoundException(String.format("Car with id: %s not found", builder.toString().substring(0, builder.length() - 2)));
         }
+
         for (CarEntity carEntityNew : clientEntityNew.getCars()) {
             carEntityNew.setClient(clientEntityNew);
         }
@@ -92,5 +88,9 @@ public class ClientService {
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException("Client not found");
         }
+    }
+
+    public void deleteAll() {
+        clientRepository.deleteAll();
     }
 }

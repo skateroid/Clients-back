@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -32,11 +33,13 @@ public class ClientEntity {
     private String patronymic;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @OrderBy("name ASC")
     @JoinTable(name = "client_city",
             joinColumns = @JoinColumn(name = "client_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "city_id", referencedColumnName = "id"))
     private Set<CityEntity> cities;
 
+    @OrderBy("registrationPlate ASC")
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private Set<CarEntity> cars;
 

@@ -11,4 +11,6 @@ public interface CityRepository extends JpaRepository<CityEntity, Long> {
     Optional<CityEntity> findCityById(Long id);
 
     List<CityEntity> findCitiesByNameContainingIgnoreCase(String name);
+
+    List<CityEntity> findAllByOrderByNameAsc();
 }

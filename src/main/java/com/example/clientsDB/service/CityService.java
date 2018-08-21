@@ -39,10 +39,7 @@ public class CityService {
     }
 
     public List<City> getAll() {
-        if (cityRepository.findAll().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return cityMapper.mapEntitiesToModel(cityRepository.findAll());
+        return cityMapper.mapEntitiesToModel(cityRepository.findAllByOrderByNameAsc());
     }
 
     public City createCity(CityChangeRequest cityChangeRequest) {

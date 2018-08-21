@@ -26,16 +26,10 @@ public class MarkService {
     }
 
     public List<Mark> getAll() {
-        if (markRepository.findAll().isEmpty()) {
-            return new ArrayList<>();
-        }
-        return markMapper.mapEntitiesToModel(markRepository.findAll());
+        return markMapper.mapEntitiesToModel(markRepository.findAllByOrderByNameAsc());
     }
 
     public List<Mark> getMarkByName(String name) {
-        if (markRepository.findMarkByNameContainingIgnoreCase(name).isEmpty()) {
-            return new ArrayList<>();
-        }
         List<MarkEntity> markEntityList = markRepository.findMarkByNameContainingIgnoreCase(name);
         return markMapper.mapEntitiesToModel(markEntityList);
     }
@@ -49,7 +43,6 @@ public class MarkService {
     public Mark createMark(MarkChangeRequest markChangeRequest) {
         MarkEntity newMarkEntity = markMapper.dtoToEntity(markChangeRequest);
         markRepository.save(newMarkEntity);
-
         return markService.getMarkById(newMarkEntity.getId());
     }
 

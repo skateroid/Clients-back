@@ -18,4 +18,6 @@ public interface ClientRepository extends JpaRepository<ClientEntity, Long> {
     @EntityGraph("ClientFull")
     Optional<ClientEntity> findById(Long id);
 
+    @EntityGraph("ClientFull")
+    List<ClientEntity> findAllByOrderByFullNameAsc();
 }

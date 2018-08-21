@@ -11,4 +11,6 @@ public interface MarkRepository extends JpaRepository<MarkEntity, Long> {
     Optional<MarkEntity> findMarkById(Long id);
 
     List<MarkEntity> findMarkByNameContainingIgnoreCase(String name);
+
+    List<MarkEntity> findAllByOrderByNameAsc();
 }
